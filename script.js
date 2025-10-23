@@ -26,15 +26,11 @@ function getHumanChoice() {
   return (selection, humanChoice);
 }
 
-let humanScore = 0;
-let computerScore = 0;
+function playGame(number_rounds) {
 
-function playRound(humanChoice, computerChoice) {
-  let hChoice = humanChoice.toLowerCase();
-  let cChoice = computerChoice.toLowerCase();
-  let hand = `${hChoice}|${cChoice}`
-  let roundWinner;
-  let message;
+  let humanScore = 0;
+  let computerScore = 0;
+  let gameWinner;
   const winnerTable = new Map();
   winnerTable.set("rock|rock", ["Tie", "It's a tie!"]);
   winnerTable.set("rock|paper",["computer", "You lose! Paper fully covers rock."]);
@@ -45,35 +41,52 @@ function playRound(humanChoice, computerChoice) {
   winnerTable.set("scissors|rock", ["computer", "You lose! Rock crushes scissors."]);
   winnerTable.set("scissors|paper", ["human", "You win! Scissors evisarates paper."]);
   winnerTable.set("scissors|scissors", ["Tie", "It's a tie!"]);
+
+  function playRound(humanChoice, computerChoice) {
+    let hChoice = humanChoice.toLowerCase();
+    let cChoice = computerChoice.toLowerCase();
+    let hand = `${hChoice}|${cChoice}`
+    let roundWinner;
+    let message;
   
-  let roundResult = winnerTable.get(hand);
-  roundWinner = roundResult[0];
-  message = roundResult[1];
+    let roundResult = winnerTable.get(hand);
+    roundWinner = roundResult[0];
+    message = roundResult[1];
   
-  switch(roundWinner) {
-    case "human":
-      humanScore +=1;
-      console.log(message);
-      break;
-    case "computer":
-      computerScore +=1;
-      console.log(message);
-      break;
-    case "Tie":
-      console.log(message);
-      break;
+    switch(roundWinner) {
+      case "human":
+        humanScore +=1;
+        console.log(message);
+        break;
+      case "computer":
+        computerScore +=1;
+        console.log(message);
+        break;
+      case "Tie":
+        console.log(message);
+        break;
+    }
+
+    console.log(`\n\nScore\nhuman ${humanScore} <==> computer ${computerScore}`);
   }
 
-  console.log(`\n\nScore\nhuman ${humanScore} <==> computer ${computerScore}`);
+  for (var i = 0; i < number_rounds; i++) {
+    const humanSelection = getHumanChoice();
+    const computerSelection = getComputerChoice();
+    playRound(humanSelection, computerSelection);
+  }
+
+  if (humanScore > computerScore) {
+    gameWinner = "human player";
+  } else if (computerScore > humanScore) {
+    gameWinner = "computer player";
+  } else gameWinner = "Tie";
+
+  console.log("====================================================");
+  
+  console.log(`                  WINNER: ${gameWinner}`)
+
+  console.log("====================================================");
 }
 
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
-
-playRound(humanSelection, computerSelection);
-
-function playGame() {
-
-
-
-}
+playGame(number_rounds=9);
